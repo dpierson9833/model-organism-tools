@@ -1,0 +1,11 @@
+[project]
+name = "model-organisms"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.13"
+dependencies = [
+    "accelerate>=1.10.1",
+    "datasets>=4.1.0",
+    "tokenizers>=0.22.0",
+    "transformers>=4.56.1",
+]
