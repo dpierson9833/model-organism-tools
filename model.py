@@ -59,5 +59,5 @@ class ModelCard:
             )
         
         # Extract just the new tokens
-        new_tokens = outputs[0][inputs.input_ids.shape[1]:]
+        new_tokens = outputs[0][inputs['input_ids'].shape[1]:]
         return tokenizer.decode(new_tokens, skip_special_tokens=True)
