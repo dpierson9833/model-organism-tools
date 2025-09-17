@@ -1,6 +1,8 @@
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from model import ModelCard
 from templates.prompts import PROMPTS
+import os
+from pathlib import Path
 
 MODELS = {
     "phi3-mini": "microsoft/Phi-3-mini-4k-instruct",
@@ -35,7 +37,15 @@ def generate_activations(mode: int) -> None:
                 question_instruction=question_instruction
             )
             
-            models = ModelCard("qwen2.5-3b", cache_dir="./cache", system=system)
+            # Use environment variable for cache dir, fallback to /workspace/cache for RunPod, or ./cache locally
+            cache_dir = os.environ.get('HF_HOME', None)
+            if cache_dir is None:
+                if os.path.exists('/workspace'):
+                    cache_dir = '/workspace/cache'
+                else:
+                    cache_dir = './cache'
+            
+            models = ModelCard("qwen2.5-3b", cache_dir=cache_dir, system=system)
             response = models.execute("Generate the dataset as requested")
             return response
         case _:

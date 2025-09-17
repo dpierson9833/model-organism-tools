@@ -35,6 +35,9 @@ class ModelCard:
         model = self.model
         tokenizer = self.tokenizer
         
+        # Get the device from the model
+        device = next(model.parameters()).device
+        
         # Format for chat models
         system_message = {"role": "system", "content": self.system}
         messages = [
@@ -43,6 +46,8 @@ class ModelCard:
         text = tokenizer.apply_chat_template(messages, tokenize=False)
         
         inputs = tokenizer(text, return_tensors="pt")
+        # Move inputs to the same device as the model
+        inputs = {k: v.to(device) for k, v in inputs.items()}
         
         with torch.no_grad():
             outputs = model.generate(
